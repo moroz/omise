@@ -20,7 +20,9 @@ templ Layout(title string) {
 	<html>
 		<head>
 			<title>{ title }</title>
-			if !config.ProductionMode {
+			if config.ProductionMode {
+				@ViteEntrypoint(Manifest)
+			} else {
 				<script type="module" src="http://localhost:5173/src/main.ts"></script>
 			}
 		</head>
@@ -32,4 +34,13 @@ templ Layout(title string) {
 			@Footer()
 		</body>
 	</html>
+}
+
+templ ViteEntrypoint(manifest *AssetManifest) {
+	if manifest != nil {
+		<script type="module" src={ manifest.Entrypoint }></script>
+		for _, file := range manifest.CSSFiles {
+			<link rel="stylesheet" href={ file }/>
+		}
+	}
 }
