@@ -1,7 +1,14 @@
 package templates
 
-templ ProductIndex() {
+import "github.com/moroz/omise/models"
+
+templ ProductIndex(products []models.Product) {
 	@Layout("Products") {
 		<h2>Products</h2>
+		<ul>
+			for _, product := range products {
+				<li>{ product.Name }</li>
+			}
+		</ul>
 	}
 }
