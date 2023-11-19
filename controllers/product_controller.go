@@ -20,3 +20,7 @@ func ProductIndex(db *sqlx.DB) http.HandlerFunc {
 		templates.ProductIndex(products).Render(r.Context(), w)
 	}
 }
+
+func NewProduct(w http.ResponseWriter, r *http.Request) {
+	templates.NewProduct().Render(r.Context(), w)
+}

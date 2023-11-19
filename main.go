@@ -18,6 +18,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Get("/", controllers.ProductIndex(db))
+	r.Get("/products/new", controllers.NewProduct)
 	fmt.Println("Listening on port 3000")
 	http.ListenAndServe(":3000", r)
 }

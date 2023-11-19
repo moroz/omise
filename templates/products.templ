@@ -1,6 +1,7 @@
 package templates
 
 import "github.com/moroz/omise/models"
+import "strconv"
 
 templ ProductIndex(products []models.Product) {
 	@Layout("Products") {
@@ -10,5 +11,32 @@ templ ProductIndex(products []models.Product) {
 				<li>{ product.Name }</li>
 			}
 		</ul>
+		<a href="/products/new">New Product</a>
 	}
+}
+
+templ ProductForm(product models.Product, action string, method string) {
+	@Layout("New Product") {
+		<form action={ templ.URL(action) } method={ method }>
+			<label class="field">
+				<span>Name</span>
+				<input type="text" name="name" value={ product.Name } autofocus/>
+			</label>
+			<label class="field">
+				<span>Price</span>
+				<input type="number" name="price" value={ strconv.Itoa(product.Price) }/>
+			</label>
+			<button type="submit">
+				if method == "POST" {
+					Create Product
+				} else {
+					Update Product
+				}
+			</button>
+		</form>
+	}
+}
+
+func NewProduct() templ.Component {
+	return ProductForm(models.Product{}, "/products", "POST")
 }
