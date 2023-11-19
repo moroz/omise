@@ -1,0 +1,28 @@
+package templates
+
+templ Footer() {
+	<footer>
+		<p>&copy; 2023 by Karol Moroz.</p>
+	</footer>
+}
+
+templ Header() {
+	<header>
+		<h1>Omise</h1>
+	</header>
+}
+
+templ Layout(title string) {
+	<html>
+		<head>
+			<title>{ title }</title>
+		</head>
+		<body>
+			@Header()
+			<main>
+				{ children... }
+			</main>
+			@Footer()
+		</body>
+	</html>
+}
