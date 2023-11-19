@@ -1,6 +1,7 @@
 package templates
 
 import "github.com/moroz/omise/models"
+import "fmt"
 import "strconv"
 
 templ ProductIndex(products []models.Product) {
@@ -15,8 +16,16 @@ templ ProductIndex(products []models.Product) {
 	}
 }
 
+func productFormTitle(product models.Product) string {
+	if product.ID.IsNil() {
+		return "New Product"
+	}
+	return fmt.Sprintf("Edit product: %s", product.Name)
+}
+
 templ ProductForm(product models.Product, action string, method string) {
-	@Layout("New Product") {
+	@Layout(productFormTitle(product)) {
+		<h2>{ productFormTitle(product) }</h2>
 		<form action={ templ.URL(action) } method={ method }>
 			<label class="field">
 				<span>Name</span>
