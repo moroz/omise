@@ -26,6 +26,14 @@ templ ProductForm(product models.Product, action string, method string) {
 				<span>Price</span>
 				<input type="number" name="price" value={ strconv.Itoa(product.Price) }/>
 			</label>
+			<label class="field">
+				<span>Description</span>
+				if product.Description != nil {
+					<textarea rows="5" name="description" value={ *product.Description }></textarea>
+				} else {
+					<textarea rows="5" name="description"></textarea>
+				}
+			</label>
 			<button type="submit">
 				if method == "POST" {
 					Create Product
