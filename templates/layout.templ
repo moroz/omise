@@ -5,14 +5,16 @@ import (
 )
 
 templ Footer() {
-	<footer>
+	<footer class="footer">
 		<p>&copy; 2023 by Karol Moroz.</p>
 	</footer>
 }
 
 templ Header() {
-	<header>
-		<h1>Omise</h1>
+	<header class="header">
+		<a href="/">
+			<h1>お店</h1>
+		</a>
 	</header>
 }
 
@@ -27,11 +29,15 @@ templ Layout(title string) {
 			}
 		</head>
 		<body>
-			@Header()
-			<main>
-				{ children... }
-			</main>
-			@Footer()
+			<div class="layout">
+				@Header()
+				<main>
+					<div class="container">
+						{ children... }
+					</div>
+				</main>
+				@Footer()
+			</div>
 		</body>
 	</html>
 }

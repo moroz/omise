@@ -34,7 +34,7 @@ templ ProductForm(product models.Product, action string, method string) {
 					<textarea rows="5" name="description"></textarea>
 				}
 			</label>
-			<button type="submit">
+			<button type="submit" class="button is-primary">
 				if method == "POST" {
 					Create Product
 				} else {

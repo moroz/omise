@@ -1,0 +1,55 @@
+*, *::after, *::before
+  box-sizing: border-box
+
+html, body
+  font-size: 100%
+
+body
+  padding: 0
+  margin: 0
+
+:root
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif
+  line-height: 1.5
+  font-weight: 400
+
+  font-synthesis: none
+  text-rendering: optimizeLegibility
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+form
+  .field
+    margin-bottom: .5rem
+
+    &, span, input
+      display: block
+
+    span
+      font-weight: bold
+
+    input
+      height: $input-height
+
+.layout
+  display: flex
+  flex-direction: column
+  min-height: 100vh
+
+  main
+    flex: 1
+
+.footer
+  text-align: center
+
+.header
+  text-align: center
+
+.container
+  width: 100%
+  padding: 1.25rem
+
+  @media screen and (min-width: #{$container-width})
+    width: $container-width
+    margin: 0 auto
+
