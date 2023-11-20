@@ -20,6 +20,7 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Get("/", controllers.ProductIndex(db))
 	r.Get("/products/new", controllers.NewProduct)
+	r.Get("/products/{slug}", controllers.ShowProduct(db))
 	r.Post("/products", controllers.CreateProduct(db))
 
 	if config.ProductionMode {

@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"strings"
 	"unicode"
 
@@ -16,4 +18,13 @@ func Slugify(text string) string {
 	lower := strings.ToLower(deaccented)
 	lower = strings.ReplaceAll(lower, "ł", "l")
 	return strings.ReplaceAll(lower, " ", "-")
+}
+
+// / GenerateSlug converts a title to a kebab-case slug with a random
+// / hexadecimal string at the end
+func GenerateSlug(title string) string {
+	randomBytes := make([]byte, 2)
+	rand.Read(randomBytes)
+	hexStr := hex.EncodeToString(randomBytes)
+	return Slugify(title) + "-" + hexStr
 }

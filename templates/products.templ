@@ -4,12 +4,23 @@ import "github.com/moroz/omise/models"
 import "fmt"
 import "strconv"
 
+templ NotFound() {
+	@Layout("Not Found") {
+		<h2>Not Found</h2>
+		<p>The requested resource could not be found on the server.</p>
+	}
+}
+
 templ ProductIndex(products []models.Product) {
 	@Layout("Products") {
 		<h2>Products</h2>
 		<ul>
 			for _, product := range products {
-				<li>{ product.Name } &ndash; NT${ strconv.Itoa(product.Price) }</li>
+				<li>
+					<a href={ templ.URL("/products/" + product.Slug) }>
+						{ product.Name } &ndash; NT${ strconv.Itoa(product.Price) }
+					</a>
+				</li>
 			}
 		</ul>
 		<a href="/products/new">New Product</a>
@@ -56,4 +67,11 @@ templ ProductForm(product models.Product, action string, method string) {
 
 func NewProduct() templ.Component {
 	return ProductForm(models.Product{}, "/products", "POST")
+}
+
+templ ShowProduct(product *models.Product) {
+	@Layout("Product: " + product.Name) {
+		<h2>Product: { product.Name }</h2>
+		<p><strong>Price:</strong> NT${ strconv.Itoa(product.Price) }</p>
+	}
 }

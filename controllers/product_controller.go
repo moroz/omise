@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
 	"github.com/moroz/omise/models"
 	"github.com/moroz/omise/templates"
@@ -55,5 +56,22 @@ func CreateProduct(db *sqlx.DB) http.HandlerFunc {
 			return
 		}
 		http.Redirect(w, r, "/", http.StatusFound)
+	}
+}
+
+func ShowProduct(db *sqlx.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		slug := chi.URLParam(r, "slug")
+		product, err := models.GetProductBySlug(db, slug)
+
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			tpl := templates.NotFound()
+			tpl.Render(r.Context(), w)
+			return
+		}
+
+		tpl := templates.ShowProduct(product)
+		tpl.Render(r.Context(), w)
 	}
 }
