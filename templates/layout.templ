@@ -44,9 +44,9 @@ templ Layout(title string) {
 
 templ ViteEntrypoint(manifest *AssetManifest) {
 	if manifest != nil {
-		<script type="module" src={ manifest.Entrypoint }></script>
+		<script type="module" src={ "/" + manifest.Entrypoint }></script>
 		for _, file := range manifest.CSSFiles {
-			<link rel="stylesheet" href={ file }/>
+			<link rel="stylesheet" href={ "/" + file }/>
 		}
 	}
 }
