@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	_ "github.com/a-h/templ"
 	"github.com/moroz/omise/config"
 )
 
