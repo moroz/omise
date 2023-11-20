@@ -9,7 +9,7 @@ templ ProductIndex(products []models.Product) {
 		<h2>Products</h2>
 		<ul>
 			for _, product := range products {
-				<li>{ product.Name }</li>
+				<li>{ product.Name } &ndash; NT${ strconv.Itoa(product.Price) }</li>
 			}
 		</ul>
 		<a href="/products/new">New Product</a>

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -19,6 +20,7 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Get("/", controllers.ProductIndex(db))
 	r.Get("/products/new", controllers.NewProduct)
+	r.Post("/products", controllers.CreateProduct(db))
 	fmt.Println("Listening on port 3000")
-	http.ListenAndServe(":3000", r)
+	log.Fatal(http.ListenAndServe(":3000", r))
 }

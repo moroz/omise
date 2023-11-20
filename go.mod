@@ -11,3 +11,5 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/moroz/uuidv7-go v0.0.0-20231119172155-c5c58f21b418
 )
+
+require golang.org/x/text v0.14.0 // indirect

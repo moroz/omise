@@ -15,3 +15,5 @@ github.com/mattn/go-sqlite3 v1.14.6 h1:dNPt6NO46WmLVt2DLNpwczCmdV5boIZ6g/tlDrlRU
 github.com/mattn/go-sqlite3 v1.14.6/go.mod h1:NyWgC/yNuGj7Q9rpYnZvas74GogHl5/Z4A/KQRfk6bU=
 github.com/moroz/uuidv7-go v0.0.0-20231119172155-c5c58f21b418 h1:0QYDvjyw0/AWHdYogy0GYZdKpcEfjLljCyWZSFwfmas=
 github.com/moroz/uuidv7-go v0.0.0-20231119172155-c5c58f21b418/go.mod h1:0cGZgZwmxB9ZQecz2No09lUbG/TvmFy0TbAcjxgXt88=
+golang.org/x/text v0.14.0 h1:ScX5w1eTa3QqT8oi6+ziP7dTV1S2+ALU0bI+0zXKWiQ=
+golang.org/x/text v0.14.0/go.mod h1:18ZOQIKpY8NJVqYksKHtTdi31H5itFRjB5/qKTNYzSU=

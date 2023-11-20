@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/moroz/omise/models"
@@ -23,4 +25,35 @@ func ProductIndex(db *sqlx.DB) http.HandlerFunc {
 
 func NewProduct(w http.ResponseWriter, r *http.Request) {
 	templates.NewProduct().Render(r.Context(), w)
+}
+
+func CreateProduct(db *sqlx.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := r.ParseForm()
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusBadRequest)
+			fmt.Fprint(w, "Bad request")
+			return
+		}
+
+		name := r.PostForm.Get("name")
+		priceStr := r.PostForm.Get("price")
+		price, err := strconv.Atoi(priceStr)
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusBadRequest)
+			fmt.Fprint(w, "Bad request")
+			return
+		}
+		description := r.PostForm.Get("description")
+		_, err = models.CreateProduct(db, name, price, description)
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			fmt.Fprintf(w, "An error occurred: %s", err)
+			return
+		}
+		http.Redirect(w, r, "/", http.StatusFound)
+	}
 }
