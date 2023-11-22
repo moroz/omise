@@ -31,56 +31,67 @@ func productFormTitle(product models.Product) string {
 	if product.ID.IsNil() {
 		return "New Product"
 	}
-	return fmt.Sprintf("Edit product: %s", product.Name)
+	return "Edit Product: " + product.Name
 }
 
 templ ProductForm(product models.Product, action string, method string) {
-	@Layout(productFormTitle(product)) {
-		<h2>{ productFormTitle(product) }</h2>
-		<form action={ templ.URL(action) } method="POST">
-			if action != "POST" {
-				<input type="hidden" name="_method" value={ method }/>
-			}
-			<label class="field">
-				<span>Name</span>
-				<input type="text" name="name" value={ product.Name } autofocus/>
-			</label>
-			<label class="field">
-				<span>Price</span>
-				<input type="number" name="price" value={ strconv.Itoa(product.Price) }/>
-			</label>
-			<label class="field">
-				<span>Description</span>
+	<h2>{ productFormTitle(product) }</h2>
+	<form action={ templ.URL(action) } method="POST">
+		if method != "POST" {
+			<input type="hidden" name="_method" value={ method }/>
+		}
+		<label class="field">
+			<span>Name</span>
+			<input type="text" name="name" value={ product.Name } autofocus/>
+		</label>
+		<label class="field">
+			<span>Price</span>
+			<input type="number" name="price" value={ strconv.Itoa(product.Price) }/>
+		</label>
+		<label class="field">
+			<span>Description</span>
+			<textarea rows="5" name="description">
 				if product.Description != nil {
-					<textarea rows="5" name="description" value={ *product.Description }></textarea>
-				} else {
-					<textarea rows="5" name="description"></textarea>
+					{ *product.Description }
 				}
-			</label>
-			<button type="submit" class="button is-primary">
-				if method == "POST" {
-					Create Product
-				} else {
-					Update Product
-				}
-			</button>
-		</form>
+			</textarea>
+		</label>
+		<button type="submit" class="button is-primary">
+			if method == "POST" {
+				Create Product
+			} else {
+				Update Product
+			}
+		</button>
+	</form>
+}
+
+templ NewProduct() {
+	@Layout("New Product") {
+		<a href="/">&lt;&lt; Back to index</a>
+		@ProductForm(models.Product{}, "/products", "POST")
 	}
 }
 
-func NewProduct() templ.Component {
-	return ProductForm(models.Product{}, "/products", "POST")
-}
-
-func EditProduct(product *models.Product) templ.Component {
-	action := fmt.Sprintf("/products/%s", product.ID.String())
-	return ProductForm(*product, action, "PATCH")
+templ EditProduct(product *models.Product) {
+	@Layout(fmt.Sprintf("Edit product: %s", product.Name)) {
+		<a href={ templ.URL("/products/" + product.Slug) }>&lt;&lt; Back to product</a>
+		@ProductForm(*product, "/products/" + product.ID.String(), "PATCH")
+	}
 }
 
 templ ShowProduct(product *models.Product) {
 	@Layout("Product: " + product.Name) {
+		<a href="/">&lt;&lt; Back to index</a>
 		<h2>Product: { product.Name }</h2>
 		<p><strong>Price:</strong> NT${ strconv.Itoa(product.Price) }</p>
+		<p>
+			<strong>Description:</strong>
+			<br/>
+			if product.Description != nil {
+				{ *product.Description }
+			}
+		</p>
 		<a href={ templ.URL("/products/" + product.Slug + "/edit") }>
 			Edit product
 		</a>
