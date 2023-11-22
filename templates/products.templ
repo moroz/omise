@@ -37,7 +37,10 @@ func productFormTitle(product models.Product) string {
 templ ProductForm(product models.Product, action string, method string) {
 	@Layout(productFormTitle(product)) {
 		<h2>{ productFormTitle(product) }</h2>
-		<form action={ templ.URL(action) } method={ method }>
+		<form action={ templ.URL(action) } method="POST">
+			if action != "POST" {
+				<input type="hidden" name="_method" value={ method }/>
+			}
 			<label class="field">
 				<span>Name</span>
 				<input type="text" name="name" value={ product.Name } autofocus/>
@@ -69,9 +72,17 @@ func NewProduct() templ.Component {
 	return ProductForm(models.Product{}, "/products", "POST")
 }
 
+func EditProduct(product *models.Product) templ.Component {
+	action := fmt.Sprintf("/products/%s", product.ID.String())
+	return ProductForm(*product, action, "PATCH")
+}
+
 templ ShowProduct(product *models.Product) {
 	@Layout("Product: " + product.Name) {
 		<h2>Product: { product.Name }</h2>
 		<p><strong>Price:</strong> NT${ strconv.Itoa(product.Price) }</p>
+		<a href={ templ.URL("/products/" + product.Slug + "/edit") }>
+			Edit product
+		</a>
 	}
 }

@@ -75,3 +75,63 @@ func ShowProduct(db *sqlx.DB) http.HandlerFunc {
 		tpl.Render(r.Context(), w)
 	}
 }
+
+func EditProduct(db *sqlx.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		slug := chi.URLParam(r, "slug")
+		product, err := models.GetProductBySlug(db, slug)
+
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			tpl := templates.NotFound()
+			tpl.Render(r.Context(), w)
+			return
+		}
+
+		tpl := templates.EditProduct(product)
+		tpl.Render(r.Context(), w)
+	}
+}
+
+func UpdateProduct(db *sqlx.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := chi.URLParam(r, "id")
+		product, err := models.GetProductById(db, id)
+
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			tpl := templates.NotFound()
+			tpl.Render(r.Context(), w)
+			return
+		}
+
+		err = r.ParseForm()
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusBadRequest)
+			fmt.Fprint(w, "Bad request")
+			return
+		}
+
+		priceStr := r.PostForm.Get("price")
+		price, err := strconv.Atoi(priceStr)
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusBadRequest)
+			fmt.Fprint(w, "Bad request")
+			return
+		}
+		description := r.PostForm.Get("description")
+		name := r.PostForm.Get("name")
+
+		product, err = models.UpdateProduct(db, product, name, price, description)
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprint(w, "Internal Server Error")
+			return
+		}
+
+		http.Redirect(w, r, "/products/"+product.Slug, http.StatusFound)
+	}
+}

@@ -45,3 +45,22 @@ func GetProductBySlug(db *sqlx.DB, slug string) (*Product, error) {
 	}
 	return &result, err
 }
+
+func GetProductById(db *sqlx.DB, id string) (*Product, error) {
+	result := Product{}
+	err := db.Get(&result, "select "+PRODUCT_COLUMNS+" from products where id = $1", id)
+	if err != nil {
+		return nil, err
+	}
+	return &result, err
+}
+
+func UpdateProduct(db *sqlx.DB, product *Product, name string, price int, description string) (*Product, error) {
+	result := Product{}
+	err := db.Get(&result, "update products set name = $1, price = $2, description = $3, updated_at = now() at time zone 'utc' where id = $4 returning "+PRODUCT_COLUMNS,
+		name, price, description, product.ID.String())
+	if err != nil {
+		return nil, err
+	}
+	return &result, err
+}
